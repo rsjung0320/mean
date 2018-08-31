@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-post-list',
@@ -11,6 +11,6 @@ export class PostListComponent {
   //   {title: 'Second Post', content: 'This is the second post\'s content'},
   //   {title: 'Third Post', content: 'This is the third post\'s content'}
   // ];
-  posts = [];
+  @Input() posts = []; // post-create에서 @Output 한 것을 상위 app.component를 걸쳐서 받는다.
 }
 

@@ -1,6 +1,9 @@
 <app-header></app-header>
 <main>
-  <app-post-create></app-post-create>
-  <app-post-list></app-post-list>
+  <!-- (postCreated)는 post-create에서 내뿜는 이벤트이고 onPostAdded($event)은 app.component에서 받는다.  -->
+  <app-post-create (postCreated)="onPostAdded($event)"></app-post-create>
+  <!-- [posts]는 post-list의 변수이고 storedPosts는 app.component의 변수이다.
+  즉 [posts]에 storedPosts를 주입하는 것이다. -->
+  <app-post-list [posts]="storedPosts"></app-post-list>
 </main>
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-post-create',
@@ -6,11 +6,17 @@ import { Component } from '@angular/core';
   styleUrls: ['./post-create.component.css']
 })
 export class PostCreateComponent {
-  enteredValue = '';
-  newPost = '';
+  enteredTitle = '';
+  enteredContent = '';
+
+  @Output() postCreated = new EventEmitter();
 
   onAddPost() {
-    this.newPost = this.enteredValue;
+    const post = {
+      title: this.enteredTitle,
+      content: this.enteredContent
+    };
+    this.postCreated.emit(post); // 내뿜는다는 의미. 그래서 한단계 위인 app.component.html에서 받을 수 있다.
   }
   // onAddPost(postInput: HTMLTextAreaElement) {
   //   this.newPost = postInput.value;
