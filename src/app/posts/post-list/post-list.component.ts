@@ -18,7 +18,7 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    // this.posts = this.postsService.getPosts();
+    this.postsService.getPosts();
     // 리스트이기 때문에 Observer가 되야 한다. 상황이 변경이 되면 첫번째, param에서 해당 내역을 처리하고, 두번째 param에서는 error를 세번째 param에는 완료 후 처리 로직이 들어간다.
     this.postsSub = this.postsService.getPostUpdateListener().subscribe((posts: Post[]) => {
       // 200: Success
