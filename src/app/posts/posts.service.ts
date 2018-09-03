@@ -27,8 +27,12 @@ export class PostsService {
 
   addPost (title: string, content: string) {
     const post: Post = {id: null, title: title, content: content};
-    this.posts.push(post);
-    // 위에서 값을 넣고, observer들이 알 수 있도록 이벤트를 emit 한다.
-    this.postsUpdated.next([...this.posts]);
+    this.http.post<{message: string}>('http://localhost:3000/api/posts', post)
+    .subscribe((responseData) => {
+      console.log(responseData.message);
+      this.posts.push(post);
+      // 위에서 값을 넣고, observer들이 알 수 있도록 이벤트를 emit 한다.
+      this.postsUpdated.next([...this.posts]);
+    });
   }
 }
