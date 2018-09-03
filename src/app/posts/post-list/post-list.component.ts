@@ -10,11 +10,6 @@ import { PostsService } from '../posts.service';
   styleUrls: ['./post-list.component.css']
 })
 export class PostListComponent implements OnInit, OnDestroy {
-  // posts = [
-  //   {title: 'First Post', content: 'This is the first post\'s content'},
-  //   {title: 'Second Post', content: 'This is the second post\'s content'},
-  //   {title: 'Third Post', content: 'This is the third post\'s content'}
-  // ];
   posts: Post[] = []; // post-create에서 @Output 한 것을 상위 app.component를 걸쳐서 받는다.
   private postsSub: Subscription; // observer와 같다고 생가하면 될 듯.
 
@@ -38,7 +33,6 @@ export class PostListComponent implements OnInit, OnDestroy {
       console.log('Observable / Subject is over / the end');
     });
   }
-
 
   ngOnDestroy() {
     // Subscription 과 메모리 leak을 없앤다.
