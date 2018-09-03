@@ -10,7 +10,7 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
   // console.log('Second middleware');
   // next();
-  res.send('Hello from express!');
+  res.send('Hello from express!!');
 });
 
 module.exports = app;
