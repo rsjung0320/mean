@@ -1,9 +1,19 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 const Post = require('./models/post');
 
 const app = express();
+
+mongoose.connect("mongodb+srv://jung:NqiqwFKyG1d7wDqv@cluster-hckzp.mongodb.net/test?retryWrites=true")
+  .then(() => {
+    console.log('Connected to database!');;
+
+  })
+  .catch(() => {
+    console.log('Connection failed!');;
+  });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -15,7 +25,7 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS");
   next();
 });
-// NqiqwFKyG1d7wDqv
+
 app.post("/api/posts", (req, res, next) => {
   // 아직은 mongodb와 연결은 되지 않았다. new Post를 한 순간 몽고 DB에서 ID를 생성하는 것을 확인하였다.
   const post = new Post({
