@@ -2,7 +2,8 @@
 <mat-card>
   <!-- ngForm은 값에 접근 하게 해주고, vaildation도 체크해준다고 한다. -->
   <!-- required는 aungular문법은 아니다. -->
-  <form (submit)="onSavePost(postForm)" #postForm="ngForm"  >
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <form (submit)="onSavePost(postForm)" #postForm="ngForm" *ngIf="!isLoading">
     <mat-form-field>
       <!-- <input matInput type="text" [(ngModel)]="enteredTitle"> -->
       <!-- ngModel은 one way binding 이라고 함 -->

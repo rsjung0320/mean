@@ -14,6 +14,7 @@ export class PostCreateComponent implements OnInit {
   post: Post;
   private mode = 'create';
   private postId: string;
+  isLoading = false;
 
   constructor(public postsService: PostsService, public route: ActivatedRoute) {}
 
@@ -23,7 +24,9 @@ export class PostCreateComponent implements OnInit {
       if (paramMap.has('postId')) {
         this.mode = 'edit';
         this.postId = paramMap.get('postId');
+        this.isLoading = true;
         this.postsService.getPost(this.postId).subscribe(postData => {
+          this.isLoading = false;
           this.post = { id: postData._id, title: postData.title, content: postData.content };
         });
       } else {
@@ -37,6 +40,7 @@ export class PostCreateComponent implements OnInit {
     if (form.invalid) {
       return;
     }
+    this.isLoading = true; // 어짜피 다른곳에 갔다가 다시 이 화면이 불려지면 false로 변경되기 때문에 아래에 false로 명시적으로 넣지 않는다.
     if (this.mode === 'create') {
       this.postsService.addPost(form.value.title, form.value.content);
     } else {
