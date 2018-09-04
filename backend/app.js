@@ -53,5 +53,12 @@ app.get('/api/posts', (req, res, next) => {
   // next()는 이 함수를 끝낸다는 뜻이다. 하지만 우리는 계속해서 해야하니 쓰면 안된다.
 });
 
+app.delete('/api/posts/:id', (req, res, next) => {
+  Post.deleteOne({ _id: req.params.id}).then(result => {
+    console.log(result);;
+    res.status(200).json({message: "Post deleted!"});
+  })
+
+});
 
 module.exports = app;
