@@ -51,7 +51,12 @@ export class PostsService {
   deletePost(postId: string) {
     this.http.delete('http://localhost:3000/api/posts/' + postId)
       .subscribe(() => {
-        console.log('Deleted!');
+        // filter는 오직 posts의 부분집합으로
+        // 결과가 참인 것만 array 담겨서 updatedPosts에 적용한다.
+        // 대신 이 방법은 서버로 가지 않고, 로컬에서 데이터를 삭제하고 다시 보여주는 것이다.
+        const updatedPosts = this.posts.filter(post => post.id !== postId);
+        this.posts = updatedPosts;
+        this.postsUpdated.next([...this.posts]);
       });
   }
 }
