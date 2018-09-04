@@ -39,9 +39,13 @@ export class PostsService {
 
   addPost(title: string, content: string) {
     const post: Post = { id: null, title: title, content: content };
-    this.http.post<{ message: string }>('http://localhost:3000/api/posts', post)
+    this.http.post<{ message: string, postId: string }>('http://localhost:3000/api/posts', post)
       .subscribe((responseData) => {
         console.log(responseData.message);
+        // 한가지의 post를 add하고 난 후, 새로 모든 리스트를 불러오는건 안좋은 생각이라고 강사는 말한다.
+        // 더 좋은 방법으로는 DB에 등록된 1개의 값 중 id만 을 response 받는 것이 효율적이다 라고 함
+        const id = responseData.postId;
+        post.id = id;
         this.posts.push(post);
         // 위에서 값을 넣고, observer들이 알 수 있도록 이벤트를 emit 한다.
         this.postsUpdated.next([...this.posts]);
