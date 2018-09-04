@@ -7,11 +7,26 @@
       <!-- <input matInput type="text" [(ngModel)]="enteredTitle"> -->
       <!-- ngModel은 one way binding 이라고 함 -->
       <!-- [ngModel]은 양방향인가? -->
-      <input matInput type="text" name="title" [ngModel]="post.title" required minlength="3" #title="ngModel" placeholder="Title">
+      <input
+        matInput
+        type="text"
+        name="title"
+        [ngModel]="post?.title"
+        required
+        minlength="3"
+        placeholder="Title"
+        #title="ngModel">
       <mat-error *ngIf="title.invalid"> Please enter a post title.</mat-error>
     </mat-form-field>
     <mat-form-field>
-      <textarea matInput rows="4" name="content" [ngModel]="post.content" required #content="ngModel" placeholder="content"></textarea>
+      <textarea
+        matInput
+        rows="4"
+        name="content"
+        [ngModel]="post?.content"
+        required
+        placeholder="content"
+        #content="ngModel"></textarea>
       <mat-error *ngIf="content.invalid"> Please enter a post content.</mat-error>
     </mat-form-field>
     <button mat-raised-button color="primary" type="submit">Save Post</button>
