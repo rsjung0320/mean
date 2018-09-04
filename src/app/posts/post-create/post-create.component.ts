@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { PostsService } from '../posts.service';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Post } from '../post.model';
 
 @Component({
   selector: 'app-post-create',
@@ -8,9 +10,26 @@ import { PostsService } from '../posts.service';
   styleUrls: ['./post-create.component.css']
 })
 
-export class PostCreateComponent {
+export class PostCreateComponent implements OnInit {
+  private mode = 'create';
+  private postId: string;
+  private post: Post;
 
-  constructor(public postsService: PostsService) {}
+  constructor(public postsService: PostsService, public route: ActivatedRoute) {}
+
+  ngOnInit() {
+    // 한 화면에서 create or edit 인지를 판단하여 화면을 reuse 한다.
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      if (paramMap.has('postId')) {
+        this.mode = 'edit';
+        this.postId = paramMap.get('postId');
+        this.post = this.postsService.getPost(this.postId);
+      } else {
+        this.mode = 'create';
+        this.postId = null;
+      }
+    });
+  }
 
   onAddPost(form: NgForm) {
     if (form.invalid) {
