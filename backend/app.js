@@ -1,6 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 
+const Post = require('./models/post');
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -15,7 +17,11 @@ app.use((req, res, next) => {
 });
 // NqiqwFKyG1d7wDqv
 app.post("/api/posts", (req, res, next) => {
-  const post = req.body;
+  // 아직은 mongodb와 연결은 되지 않았다. new Post를 한 순간 몽고 DB에서 ID를 생성하는 것을 확인하였다.
+  const post = new Post({
+    title: req.body.title,
+    content: req.body.content
+  });
   console.log(post);
   res.status(201).json({
     message: 'Post added successfully!',
