@@ -6,7 +6,7 @@ const Post = require('./models/post');
 
 const app = express();
 
-mongoose.connect("mongodb+srv://jung:NqiqwFKyG1d7wDqv@cluster-hckzp.mongodb.net/test?retryWrites=true")
+mongoose.connect("mongodb+srv://jung:NqiqwFKyG1d7wDqv@cluster-hckzp.mongodb.net/node-angular?retryWrites=true")
   .then(() => {
     console.log('Connected to database!');;
 
@@ -32,7 +32,9 @@ app.post("/api/posts", (req, res, next) => {
     title: req.body.title,
     content: req.body.content
   });
-  console.log(post);
+  // 실제 몽고 DB에 생성된 Data를 넣는다.
+  post.save();
+
   res.status(201).json({
     message: 'Post added successfully!',
   });
