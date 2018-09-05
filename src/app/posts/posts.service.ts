@@ -24,7 +24,8 @@ export class PostsService {
         return {
           title: post.title,
           content: post.content,
-          id: post._id
+          id: post._id,
+          imagePath: post.imagePath
         };
       });
     }))
@@ -50,16 +51,17 @@ export class PostsService {
     postData.append('content', content);
     postData.append('image', image, title);
 
-    this.http.post<{ message: string, postId: string }>('http://localhost:3000/api/posts', postData)
+    this.http.post<{ message: string, post: Post }>('http://localhost:3000/api/posts', postData)
       .subscribe((responseData) => {
         const post: Post = {
-          id: responseData.postId,
+          id: responseData.post.id,
           title: title,
-          content: content
+          content: content,
+          imagePath: responseData.post.imagePath
         };
         // 한가지의 post를 add하고 난 후, 새로 모든 리스트를 불러오는건 안좋은 생각이라고 강사는 말한다.
         // 더 좋은 방법으로는 DB에 등록된 1개의 값 중 id만 을 response 받는 것이 효율적이다 라고 함
-        const id = responseData.postId;
+        const id = responseData.post.id;
         post.id = id;
         this.posts.push(post);
         // 위에서 값을 넣고, observer들이 알 수 있도록 이벤트를 emit 한다.
@@ -70,7 +72,7 @@ export class PostsService {
 
 
   updatePost(id: string, title: string, content: string) {
-    const post: Post = { id: id, title: title, content: content };
+    const post: Post = { id: id, title: title, content: content, imagePath: null };
     this.http.put<{ message: string}>('http://localhost:3000/api/posts/' + id, post)
       .subscribe((response) => {
         const updatedPosts = [...this.posts];
