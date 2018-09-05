@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PostsService } from '../posts.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Post } from '../post.model';
@@ -12,10 +12,12 @@ import { Post } from '../post.model';
 
 export class PostCreateComponent implements OnInit {
   post: Post;
-  private mode = 'create';
-  private postId: string;
   isLoading = false;
   form: FormGroup;
+  imagePreview: string;
+
+  private mode = 'create';
+  private postId: string;
 
   constructor(public postsService: PostsService, public route: ActivatedRoute) {}
 
@@ -62,8 +64,11 @@ export class PostCreateComponent implements OnInit {
     const file = (event.target as HTMLInputElement).files[0];
     this.form.patchValue({image: file}); // formGroup의 value에 넣기 위함이다.
     this.form.get('image').updateValueAndValidity(); // 실제 updateValueAndValidity를 해야 formGroup의 value에 값이 들어간다.
-    console.log(file);
-    console.log(this.form);
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = reader.result.toString();
+    };
+    reader.readAsDataURL(file);
   }
 
   onSavePost() {
