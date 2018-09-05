@@ -28,7 +28,7 @@ const storage = multer.diskStorage({
   }
 });
 
-router.post("", multer({storage: storage}).single("image"), (req, res, next) => {
+router.post("", multer({ storage: storage }).single("image"), (req, res, next) => {
   const url = req.protocol + '://' + req.get('host');
   // 아직은 mongodb와 연결은 되지 않았다. new Post를 한 순간 몽고 DB에서 ID를 생성하는 것을 확인하였다.
   const post = new Post({
@@ -49,14 +49,20 @@ router.post("", multer({storage: storage}).single("image"), (req, res, next) => 
 });
 
 // update는
-router.put("/:id", (req, res, next) => {
+router.put("/:id", multer({ storage: storage }).single("image"), (req, res, next) => {
+  let imagePath = req.body.imagePath;
+  if (req.file){
+    const url = req.protocol + '://' + req.get('host');
+    imagePath = url + "/images/" + req.file.filename;
+  }
   const post = new Post({
     _id: req.body.id,
     title: req.body.title,
-    content: req.body.content
+    content: req.body.content,
+    imagePath: imagePath
   });
   // 1번 째는 where 절이고, 2번째는 update할 값이다.
-  Post.updateOne({_id: req.params.id}, post)
+  Post.updateOne({ _id: req.params.id }, post)
     .then(result => {
       res.status(200).json({
         mssage: "Update successfully!"
@@ -70,7 +76,7 @@ router.get("/:id", (req, res, next) => {
     if (post) {
       res.status(200).json(post);
     } else {
-      res.status(404).json({message: 'Post not found!'});
+      res.status(404).json({ message: 'Post not found!' });
     }
   });
 });
@@ -90,7 +96,7 @@ router.get('', (req, res, next) => {
 
 router.delete('/:id', (req, res, next) => {
   Post.deleteOne({ _id: req.params.id }).then(result => {
-    res.status(200).json({message: "Post deleted!"});
+    res.status(200).json({ message: "Post deleted!" });
   });
 
 });
