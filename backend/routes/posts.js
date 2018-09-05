@@ -1,10 +1,34 @@
 const express = require('express');
+// Multer는 파일 업로드를 위해 사용되는 multipart/form-data 를 다루기 위한 node.js 의 미들웨어 입니다. 효율성을 최대화 하기 위해 busboy 를 기반으로 하고 있습니다.
+const multer = require('multer');
 
 const Post = require('../models/post');
 
 const router = express.Router();
 
-router.post("", (req, res, next) => {
+const MIME_TYPE_MAP = {
+  'image/png': 'png',
+  'image/jpeg': 'jpg',
+  'image/jpg': 'jpg'
+};
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const isValid = MIME_TYPE_MAP[file.mimetype];
+    let error = new Error("Invalid mime type");
+    if (isValid) {
+      error = null;
+    }
+    cb(error, "backend/images");
+  },
+  filename: (req, file, cb) => {
+    const name = file.originalname.toLowerCase().split(' ').join('-');
+    const ext = MIME_TYPE_MAP[file.mimetype];
+    cb(null, name + '-' + Data.now() + '.' + ext);
+  }
+});
+
+router.post("", multer(storage).single("image"), (req, res, next) => {
   // 아직은 mongodb와 연결은 되지 않았다. new Post를 한 순간 몽고 DB에서 ID를 생성하는 것을 확인하였다.
   const post = new Post({
     title: req.body.title,
