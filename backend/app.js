@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -17,6 +18,9 @@ mongoose.connect("mongodb+srv://jung:NqiqwFKyG1d7wDqv@cluster-hckzp.mongodb.net/
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+// /images로 요정이 들어 온건은 허락하고, 파일을 가져갈 수 있도록 한다.
+// path.join은 실제 경로로 forward 해준다고 한다.
+app.use('/images', express.static(path.join('backend/images')));
 
 app.use((req, res, next) => {
   // 보안 이슈는 아니고, 설정하면 된다고 한다.
