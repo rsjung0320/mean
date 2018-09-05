@@ -18,7 +18,7 @@
     <div>
       <!-- input은 filePicker를 레퍼런스로 남기고 보이는 것은 css로 감춤처리한다. button은 레펀런스를 참조한다. -->
       <button mat-stroked-button type="button" (click)="filePicker.click()">Pick Button</button>
-      <input type="file" #filePicker>
+      <input type="file" #filePicker (change)="onImagePicked($event)">
     </div>
     <mat-form-field>
       <textarea

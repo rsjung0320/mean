@@ -26,6 +26,9 @@ export class PostCreateComponent implements OnInit {
       }),
       content: new FormControl(null, {
         validators: [Validators.required]
+      }),
+      image: new FormControl(null, {
+        validators: [Validators.required]
       })
     });
 
@@ -53,6 +56,14 @@ export class PostCreateComponent implements OnInit {
         this.postId = null;
       }
     });
+  }
+
+  onImagePicked(event: Event) {
+    const file = (event.target as HTMLInputElement).files[0];
+    this.form.patchValue({image: file}); // formGroup의 value에 넣기 위함이다.
+    this.form.get('image').updateValueAndValidity(); // 실제 updateValueAndValidity를 해야 formGroup의 value에 값이 들어간다.
+    console.log(file);
+    console.log(this.form);
   }
 
   onSavePost() {
