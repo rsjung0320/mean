@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 
 import { Post } from '../post.model';
 import { PostsService } from '../posts.service';
+import { PageEvent } from '@angular/material';
 
 @Component({
   selector: 'app-post-list',
@@ -12,6 +13,9 @@ import { PostsService } from '../posts.service';
 export class PostListComponent implements OnInit, OnDestroy {
   posts: Post[] = []; // post-create에서 @Output 한 것을 상위 app.component를 걸쳐서 받는다.
   isLoading = false;
+  totalPosts = 10;
+  postsPerPage = 5;
+  pageSizeOptions = [1, 2, 5, 10];
 
   private postsSub: Subscription; // observer와 같다고 생가하면 될 듯.
 
@@ -34,6 +38,11 @@ export class PostListComponent implements OnInit, OnDestroy {
       // TODO 좀 더 알아 볼 것, 후처리가 아니라, Observable이 자신을 종료, 소멸 했을 때, 이벤트를 emit 하는 것을 받아 주는 것 같다.
       console.log('Observable / Subject is over / the end');
     });
+  }
+
+  onChangePage(pageData: PageEvent) {
+    console.log(pageData);
+
   }
 
   onDelete(postId: string) {

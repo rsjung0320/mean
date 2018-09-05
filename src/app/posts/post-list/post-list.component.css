@@ -8,6 +8,10 @@
   text-align: center;
 }
 
+mat-pagenator {
+  margin-top: 1rem;
+}
+
 mat-spinner {
   margin: auto;
 }
