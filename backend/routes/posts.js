@@ -77,10 +77,17 @@ router.put(
       imagePath: imagePath
     });
     // 1번 째는 where 절이고, 2번째는 update할 값이다.
-    Post.updateOne({ _id: req.params.id }, post).then(result => {
-      res.status(200).json({
-        mssage: "Update successfully!"
-      });
+    Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post).then(result => {
+      // nModified 가 0이면 수정이 안된 것이고, 1이면 수정이 완료 된 것이다.
+      if (result.nModified > 0) {
+        res.status(200).json({
+          mssage: "Update successfully!"
+        });
+      } else {
+        res.status(401).json({
+          mssage: "Not authorized!"
+        });
+      }
     });
   }
 );
@@ -125,8 +132,16 @@ router.get("", (req, res, next) => {
 });
 
 router.delete("/:id", checkAuth, (req, res, next) => {
-  Post.deleteOne({ _id: req.params.id }).then(result => {
-    res.status(200).json({ message: "Post deleted!" });
+  Post.deleteOne({ _id: req.params.id, creator: req.userData.userId }).then(result => {
+    if (result.n > 0) {
+      res.status(200).json({
+        mssage: "Post deleted!"
+      });
+    } else {
+      res.status(401).json({
+        mssage: "Not authorized!"
+      });
+    }
   });
 });
 

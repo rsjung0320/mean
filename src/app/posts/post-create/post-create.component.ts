@@ -73,8 +73,6 @@ export class PostCreateComponent implements OnInit {
       this.imagePreview = reader.result.toString();
     };
     reader.readAsDataURL(file);
-    console.log(this.form);
-
   }
 
   onSavePost() {
