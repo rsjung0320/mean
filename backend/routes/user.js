@@ -10,17 +10,19 @@ router.post("/signup", (req, res, next) => {
   bcrypt.hash(req.body.password, 10).then(hash => {
     const user = new User({
       email: req.body.email,
-      password: req.body.password
+      password: hash
     });
     user
       .save()
       .then(result => {
+        // console.log(result);
         res.status(201).json({
           message: "User created!",
           result: result
         });
       })
       .catch(err => {
+        // console.log(err);
         res.status(500).json({
           error: err
         });
@@ -29,6 +31,7 @@ router.post("/signup", (req, res, next) => {
 });
 
 router.post('/login', (req, res, next) => {
+  let fetchedUser;
   User.findOne({ email: req.body.email })
     .then(user => {
       if (!user) {
@@ -36,6 +39,7 @@ router.post('/login', (req, res, next) => {
           message: 'Auth failed'
         });
       }
+      fetchedUser = user;
       return bcrypt.compare(req.body.password, user.password);
     })
     .then(result => {
@@ -45,13 +49,16 @@ router.post('/login', (req, res, next) => {
         });
       }
       const token = jwt.sign({
-        email: result.email,
-        userId: result._id
+        email: fetchedUser.email,
+        userId: fetchedUser._id
       },
       // 이것은 나의 key이므로 외부에 노출 되면 안된다.
       'secret_my_first_key',
       {
         expiresIn: '1h'
+      });
+      return res.status(200).json({
+        token: token
       });
     })
     .catch(err => {
