@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const uniqueValidator = requestAnimationFrame('mongoose-unique-validator');
+const uniqueValidator = require('mongoose-unique-validator');
 
 const userSchema = mongoose.Schema({
   // title: {type: String, require: true, default: 'Hello'},
