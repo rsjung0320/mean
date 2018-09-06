@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { Post } from '../post.model';
 import { PostsService } from '../posts.service';
 import { PageEvent } from '@angular/material';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-post-list',
@@ -17,11 +18,12 @@ export class PostListComponent implements OnInit, OnDestroy {
   postsPerPage = 5;
   currentPage = 1;
   pageSizeOptions = [1, 2, 5, 10];
+  userIsAuthenticated = false;
 
   private postsSub: Subscription; // observer와 같다고 생가하면 될 듯.
+  private authStstusSub: Subscription;
 
-  constructor(public postsService: PostsService) {
-  }
+  constructor(public postsService: PostsService, private authService: AuthService) { }
 
   ngOnInit() {
     this.isLoading = true;
@@ -42,6 +44,13 @@ export class PostListComponent implements OnInit, OnDestroy {
         // TODO 좀 더 알아 볼 것, 후처리가 아니라, Observable이 자신을 종료, 소멸 했을 때, 이벤트를 emit 하는 것을 받아 주는 것 같다.
         console.log('Observable / Subject is over / the end');
       });
+
+    this.userIsAuthenticated = this.authService.getIsAuth();
+    this.authStstusSub = this.authService
+      .getAuthStatusListener()
+      .subscribe(isAuthenticated => {
+        this.userIsAuthenticated = isAuthenticated;
+      });
   }
 
   onChangePage(pageData: PageEvent) {
@@ -60,5 +69,6 @@ export class PostListComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     // Subscription 과 메모리 leak을 없앤다.
     this.postsSub.unsubscribe();
+    this.authStstusSub.unsubscribe();
   }
 }
