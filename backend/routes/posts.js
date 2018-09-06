@@ -74,7 +74,8 @@ router.put(
       _id: req.body.id,
       title: req.body.title,
       content: req.body.content,
-      imagePath: imagePath
+      imagePath: imagePath,
+      creator: req.userData.userId
     });
     // 1번 째는 where 절이고, 2번째는 update할 값이다.
     Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post).then(result => {
