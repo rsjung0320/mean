@@ -39,10 +39,12 @@ router.post(
   (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
     // 아직은 mongodb와 연결은 되지 않았다. new Post를 한 순간 몽고 DB에서 ID를 생성하는 것을 확인하였다.
+    // req.userData는 check-auth에서 만든 변수 이다.
     const post = new Post({
       title: req.body.title,
       content: req.body.content,
-      imagePath: url + "/images/" + req.file.filename
+      imagePath: url + "/images/" + req.file.filename,
+      creator: req.userData.userId
     });
     // 실제 몽고 DB에 생성된 Data를 넣는다.
     post.save().then(createdPost => {

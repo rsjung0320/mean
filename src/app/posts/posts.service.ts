@@ -29,17 +29,19 @@ export class PostsService {
                 title: post.title,
                 content: post.content,
                 id: post._id,
-                imagePath: post.imagePath
+                imagePath: post.imagePath,
+                creator: post.creator
               };
             }),
             maxPosts: postData.maxPosts
           };
         }))
-      .subscribe(transformedPosts => {
-        this.posts = transformedPosts.posts;
+      .subscribe(transformedPostsData => {
+
+        this.posts = transformedPostsData.posts;
         this.postsUpdated.next({
           posts: [...this.posts],
-          postCount: transformedPosts.maxPosts
+          postCount: transformedPostsData.maxPosts
         });
       });
   }
