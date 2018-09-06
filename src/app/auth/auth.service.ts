@@ -8,6 +8,7 @@ import { Subject } from 'rxjs';
 export class AuthService {
   private isAuthenticated = false;
   private token: string;
+  private tokenTimer: any;
   private authStatusListener = new Subject<boolean>();
 
   constructor(private http: HttpClient, private router: Router) { }
@@ -37,12 +38,17 @@ export class AuthService {
 
   login(email: string, password: string) {
     const authData: AuthData = { email: email, password: password };
-    this.http.post<{token: string}>(
+    this.http.post<{ token: string, expiresIn: number }>(
       'http://localhost:3000/api/user/login/', authData)
       .subscribe(response => {
         const token = response.token;
         this.token = token;
         if (token) {
+          const expiresInDuration = response.expiresIn;
+          this.tokenTimer = setTimeout(() => {
+            // 1시간이 되면 자동으로 로그아웃을 한다. 하지만 이것은 현재 무언가를 하고 있던 안하고 있던, 로그아웃을 시킨다.
+            this.logout();
+          }, expiresInDuration * 1000);
           this.isAuthenticated = true;
           this.authStatusListener.next(true);
           this.router.navigate(['/']);
@@ -54,6 +60,7 @@ export class AuthService {
     this.token = null;
     this.isAuthenticated = false;
     this.authStatusListener.next(false);
+    clearTimeout(this.tokenTimer);
     this.router.navigate(['/']);
   }
 }
