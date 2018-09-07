@@ -55,7 +55,12 @@ router.post(
           ...createdPost
         }
       });
-    });
+    })
+      .catch(error => {
+        res.status(500).json({
+          message: 'Creating a post failed!'
+        });
+      });
   }
 );
 
@@ -89,7 +94,12 @@ router.put(
           mssage: "Not authorized!"
         });
       }
-    });
+    })
+      .catch(error => {
+        res.status(500).json({
+          message: "Couldn't Update post!"
+        });
+      });
   }
 );
 
@@ -101,7 +111,12 @@ router.get("/:id", (req, res, next) => {
     } else {
       res.status(404).json({ message: "Post not found!" });
     }
-  });
+  })
+    .catch(error => {
+      res.status(500).json({
+        message: "Fetching posts failed!"
+      });
+    });
 });
 
 router.get("", (req, res, next) => {
@@ -120,14 +135,18 @@ router.get("", (req, res, next) => {
       fetchedPosts = documents;
       return Post.count();
     })
-      .then(count => {
-        return res.status(200).json({
-          message: "Posts fetched successfully!",
-          posts: fetchedPosts,
-          maxPosts: count
-        });
-      })
-    .catch();
+    .then(count => {
+      return res.status(200).json({
+        message: "Posts fetched successfully!",
+        posts: fetchedPosts,
+        maxPosts: count
+      });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Fetching posts failed!"
+      });
+    });
 
   // next()는 이 함수를 끝낸다는 뜻이다. 하지만 우리는 계속해서 해야하니 쓰면 안된다.
 });
@@ -143,7 +162,12 @@ router.delete("/:id", checkAuth, (req, res, next) => {
         mssage: "Not authorized!"
       });
     }
-  });
+  })
+    .catch(error => {
+      res.status(500).json({
+        message: "Couldn't delete posts!"
+      });
+    });
 });
 
 module.exports = router;
