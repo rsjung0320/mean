@@ -50,7 +50,7 @@ exports.userLogin = (req, res, next) => {
         userId: fetchedUser._id
       },
       // 이것은 나의 key이므로 외부에 노출 되면 안된다.
-      'secret_my_first_key',
+      process.env.JWT_KEY,
       {
         expiresIn: '1h'
       });
