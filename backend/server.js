@@ -1,5 +1,5 @@
  // require는 node.js에서 import를 뜻한다. 그래서 http관련을 가져온다.
- const app = require("./backend/app");
+ const app = require("./app");
  const debug = require("debug")("node-angular");
  const http = require("http");
 
